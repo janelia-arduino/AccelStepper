@@ -14,4 +14,4 @@ License:
 
 Source:
 
-    <http://www.airspayce.com/mikem/arduino/AccelStepper/>
+<http://www.airspayce.com/mikem/arduino/AccelStepper/>
