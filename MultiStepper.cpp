@@ -16,6 +16,7 @@ boolean MultiStepper::addStepper(AccelStepper& stepper)
     if (_num_steppers >= MULTISTEPPER_MAX_STEPPERS)
 	return false; // No room for more
     _steppers[_num_steppers++] = &stepper;
+    return true;
 }
 
 void MultiStepper::moveTo(long absolute[])

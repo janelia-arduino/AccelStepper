@@ -3,7 +3,7 @@
 /// \mainpage AccelStepper library for Arduino
 ///
 /// This is the Arduino AccelStepper library.
-/// It provides an object-oriented interface for 2, 3 or 4 pin stepper motors.
+/// It provides an object-oriented interface for 2, 3 or 4 pin stepper motors and motor drivers.
 ///
 /// The standard Arduino IDE includes the Stepper library
 /// (http://arduino.cc/en/Reference/Stepper) for stepper motors. It is
@@ -23,14 +23,17 @@
 /// The latest version of this documentation can be downloaded from 
 /// http://www.airspayce.com/mikem/arduino/AccelStepper
 /// The version of the package that this documentation refers to can be downloaded 
-/// from http://www.airspayce.com/mikem/arduino/AccelStepper/AccelStepper-1.53.zip
+/// from http://www.airspayce.com/mikem/arduino/AccelStepper/AccelStepper-1.57.zip
 ///
 /// Example Arduino programs are included to show the main modes of use.
 ///
 /// You can also find online help and discussion at http://groups.google.com/group/accelstepper
 /// Please use that group for all questions and discussions on this topic. 
 /// Do not contact the author directly, unless it is to discuss commercial licensing.
-/// Before asking a question or reporting a bug, please read http://www.catb.org/esr/faqs/smart-questions.html
+/// Before asking a question or reporting a bug, please read 
+/// - http://en.wikipedia.org/wiki/Wikipedia:Reference_desk/How_to_ask_a_software_question
+/// - http://www.catb.org/esr/faqs/smart-questions.html
+/// - http://www.chiark.greenend.org.uk/~shgtatham/bugs.html
 ///
 /// Tested on Arduino Diecimila and Mega with arduino-0018 & arduino-0021 
 /// on OpenSuSE 11.1 and avr-libc-1.6.1-1.15,
@@ -87,12 +90,12 @@
 /// the right to share who uses it. If you wish to use this software under Open
 /// Source Licensing, you must contribute all your source code to the open source
 /// community in accordance with the GPL Version 2 when your application is
-/// distributed. See http://www.gnu.org/copyleft/gpl.html
+/// distributed. See https://www.gnu.org/licenses/gpl-2.0.html
 /// 
 /// \par Commercial Licensing
 /// This is the appropriate option if you are creating proprietary applications
 /// and you are not prepared to distribute and share the source code of your
-/// application. Contact info@airspayce.com for details.
+/// application. Purchase commercial licenses at http://airspayce.binpress.com/
 ///
 /// \par Revision History
 /// \version 1.0 Initial release
@@ -225,12 +228,22 @@
 ///                Added MultiStepper to keywords.txt.
 ///                Improvements to efficiency of AccelStepper::runSpeed() as suggested by David Grayson.
 ///                Improvements to speed accuracy as suggested by David Grayson.
-/// \verwsion 1.53 2016-08-14
+/// \version 1.53 2016-08-14
 ///                Backed out Improvements to speed accuracy from 1.52 as it did not work correctly.
+/// \version 1.54 2017-01-24
+///                Fixed some warnings about unused arguments.
+/// \version 1.55 2017-01-25
+///                Fixed another warning in MultiStepper.cpp
+/// \version 1.56 2017-02-03
+///                Fixed minor documentation error with DIRECTION_CCW and DIRECTION_CW. Reported by David Mutterer.
+///                Added link to Binpress commercial license purchasing.
+/// \version 1.57 2017-03-28
+///                _direction moved to protected at the request of Rudy Ercek.
+///                setMaxSpeed() and setAcceleration() now correct negative values to be positive.
 ///
 /// \author  Mike McCauley (mikem@airspayce.com) DO NOT CONTACT THE AUTHOR DIRECTLY: USE THE LISTS
 // Copyright (C) 2009-2013 Mike McCauley
-// $Id: AccelStepper.h,v 1.26 2016/08/09 00:39:10 mikem Exp mikem $
+// $Id: AccelStepper.h,v 1.27 2016/08/14 10:26:54 mikem Exp mikem $
 
 #ifndef AccelStepper_h
 #define AccelStepper_h
@@ -315,7 +328,7 @@ public:
     /// position is set to 0. MaxSpeed and Acceleration default to 1.0.
     /// The motor pins will be initialised to OUTPUT mode during the
     /// constructor by a call to enableOutputs().
-    /// \param[in] interface Number of pins to interface to. 1, 2, 4 or 8 are
+    /// \param[in] interface Number of pins to interface to. Integer values are
     /// supported, but it is preferred to use the \ref MotorInterfaceType symbolic names. 
     /// AccelStepper::DRIVER (1) means a stepper driver (with Step and Direction pins).
     /// If an enable line is also needed, call setEnablePin() after construction.
@@ -505,8 +518,8 @@ protected:
     /// Symbolic names for the direction the motor is turning
     typedef enum
     {
-	DIRECTION_CCW = 0,  ///< Clockwise
-        DIRECTION_CW  = 1   ///< Counter-Clockwise
+	DIRECTION_CCW = 0,  ///< Counter-Clockwise
+        DIRECTION_CW  = 1   ///< Clockwise
     } Direction;
 
     /// Forces the library to compute a new instantaneous speed and set that as
@@ -580,6 +593,10 @@ protected:
     /// \param[in] step The current step phase number (0 to 7)
     virtual void   step8(long step);
 
+    /// Current direction motor is spinning in
+    /// Protected because some peoples subclasses need it to be so
+    boolean _direction; // 1 == CW
+    
 private:
     /// Number of pins on the stepper motor. Permits 2 or 4. 2 pins is a
     /// bipolar, and 4 pins is a unipolar.
@@ -651,9 +668,6 @@ private:
 
     /// Min step size in microseconds based on maxSpeed
     float _cmin; // at max speed
-
-    /// Current direction motor is spinning in
-    boolean _direction; // 1 == CW
 
 };
 
