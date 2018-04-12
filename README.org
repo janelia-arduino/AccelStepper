@@ -1,0 +1,19 @@
+#+TITLE: AccelStepper
+#+AUTHOR: Peter Polidoro
+#+EMAIL: peterpolidoro@gmail.com
+
+* Library Information
+  - Author :: Mike McCauley
+  - Maintainer :: Peter Polidoro
+  - License :: GPL V2
+
+
+  [[http://www.airspayce.com/mikem/arduino/AccelStepper/]]
+
+* Library Examples
+
+  [[./examples]]
+
+* Library Dependencies
+
+  [[https://github.com/janelia-arduino/arduino-libraries][arduino-libraries]]
